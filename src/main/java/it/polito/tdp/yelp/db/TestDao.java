@@ -6,7 +6,7 @@ public class TestDao {
 		// TODO Auto-generated method stub
 		YelpDao dao = new YelpDao();
 		System.out.println(String.format("Users: %d\nBusiness: %d\nReviews: %d\n", 
-				dao.getAllUsers().size(), dao.getAllBusiness().size(), dao.getAllReviews().size()));
+				dao.getAllUsers().size(),  dao.getAllReviews().size()));
 		
 	}
 
