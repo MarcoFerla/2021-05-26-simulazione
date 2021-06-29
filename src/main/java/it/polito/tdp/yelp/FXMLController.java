@@ -53,6 +53,10 @@ public class FXMLController {
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
     	
+    	double x= Double.parseDouble(txtX.getText());
+    	for(Business b: this.model.trovaPercorsoMigliore(cmbLocale.getValue(), this.model.getLocaleMigliore(),x)) {
+    		txtResult.appendText(b.getBusinessName());
+    	}
     }
 
     @FXML

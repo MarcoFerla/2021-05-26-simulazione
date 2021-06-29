@@ -1,5 +1,6 @@
 package it.polito.tdp.yelp.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Model {
 	private YelpDao dao;
 	private SimpleDirectedWeightedGraph<Business,DefaultWeightedEdge> grafo;
 	private Map<String,Business> idMap;
+	private List<Business> percorsoMigliore;
 	
 	public Model() {
 		dao= new YelpDao();
@@ -75,4 +77,36 @@ public class Model {
 		
 		return best;
 	}
+	
+	public List<Business> trovaPercorsoMigliore(Business partenza,Business destinazione, double x){
+		
+		this.percorsoMigliore=new ArrayList<Business>();
+		List<Business> parziale = new ArrayList<Business>();
+		parziale.add(partenza);
+		cerca(parziale,1,destinazione,x);
+		
+		return this.percorsoMigliore;
+	}
+
+	private void cerca(List<Business> parziale, int i, Business destinazione, double x) {
+		
+		if(parziale.get(parziale.size()-1).equals(destinazione)) {
+			if(parziale.size()<this.percorsoMigliore.size()) {
+				this.percorsoMigliore= new ArrayList<Business>(parziale);
+				return;
+			}
+		}
+		
+		for(DefaultWeightedEdge e: grafo.outgoingEdgesOf(parziale.get(parziale.size()-1))) {
+			if(grafo.getEdgeWeight(e)>=x) {
+				Business vicino=Graphs.getOppositeVertex(grafo, e, parziale.get(parziale.size()-1));
+				if(!parziale.contains(vicino)) {
+					parziale.add(vicino);
+					cerca(parziale,i+1,destinazione,x);
+					parziale.remove(parziale.size()-1);
+				}
+			}
+		}
+	}
+	
 }
